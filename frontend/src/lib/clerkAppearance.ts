@@ -1,0 +1,51 @@
+export const clerkAppearance = {
+  variables: {
+    colorPrimary: "#2dd4bf",
+    colorDanger: "#f87171",
+    colorSuccess: "#4ade80",
+    colorWarning: "#fbbf24",
+    colorNeutral: "#64748b",
+    colorForeground: "#f1f5f9",
+    colorMutedForeground: "#94a3b8",
+    colorBackground: "#0a0f14",
+    colorInput: "#111820",
+    colorInputForeground: "#f1f5f9",
+    colorBorder: "rgba(255, 255, 255, 0.1)",
+    colorRing: "#2dd4bf",
+    borderRadius: "0.875rem",
+    fontFamily: "var(--font-body), system-ui, sans-serif",
+    fontSize: "0.875rem",
+  },
+  elements: {
+    rootBox: "w-full",
+    cardBox: "w-full shadow-none",
+    card: "bg-transparent shadow-none border-0 p-0 w-full gap-6",
+    header: "hidden",
+    headerTitle: "hidden",
+    headerSubtitle: "hidden",
+    socialButtonsRoot: "gap-2.5",
+    socialButtonsBlockButton:
+      "h-11 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition",
+    socialButtonsBlockButtonText: "font-medium text-sm",
+    dividerLine: "bg-[var(--border)]",
+    dividerText: "text-[var(--text-muted)] text-xs uppercase tracking-wider",
+    formFieldLabel: "text-xs font-medium text-[var(--text-secondary)]",
+    formFieldInput:
+      "h-11 rounded-xl border border-[var(--border)] bg-black/25 px-3.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-teal-400/40 focus:ring-2 focus:ring-teal-400/20",
+    formButtonPrimary:
+      "h-11 rounded-full bg-gradient-to-r from-teal-400 to-teal-500 text-sm font-semibold text-[#042f2e] shadow-[0_8px_20px_-8px_rgba(45,212,191,0.45)] hover:brightness-110 transition",
+    footerActionText: "text-sm text-[var(--text-secondary)]",
+    footerActionLink: "text-teal-300 hover:text-teal-200 font-medium",
+    identityPreviewText: "text-[var(--text-primary)]",
+    identityPreviewEditButton: "text-teal-300 hover:text-teal-200",
+    formFieldSuccessText: "text-teal-300",
+    formFieldErrorText: "text-red-300",
+    alertText: "text-sm",
+    otpCodeFieldInput:
+      "rounded-xl border border-[var(--border)] bg-black/25 text-[var(--text-primary)]",
+  },
+  layout: {
+    socialButtonsPlacement: "top",
+    showOptionalFields: true,
+  },
+};
