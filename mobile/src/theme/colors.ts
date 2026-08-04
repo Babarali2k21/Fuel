@@ -1,0 +1,15 @@
+export const colors = {
+  primary: "#16A34A",
+  secondary: "#2563EB",
+  background: "#F9FAFB",
+  surface: "#FFFFFF",
+  text: "#111827",
+  textMuted: "#6B7280",
+  border: "#E5E7EB",
+  priceCheap: "#22C55E",
+  priceAverage: "#F59E0B",
+  priceExpensive: "#EF4444",
+  shadow: "rgba(17, 24, 39, 0.08)",
+  overlay: "rgba(17, 24, 39, 0.45)",
+  premium: "#7C3AED",
+} as const;
