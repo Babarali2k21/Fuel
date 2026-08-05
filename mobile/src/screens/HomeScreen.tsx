@@ -7,7 +7,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BottomSheet } from "../components/BottomSheet";
@@ -21,7 +20,7 @@ import { getAveragePrice } from "../types/station";
 import { colors } from "../theme/colors";
 import { typography } from "../theme/typography";
 
-type Props = NativeStackScreenProps<HomeStackParamList, "Home">;
+type Props = NativeStackScreenProps<HomeStackParamList, "HomeMap">;
 
 export function HomeScreen({ navigation }: Props) {
   const { location, loading: locationLoading, error: locationError, refresh: refreshLocation } =
@@ -44,79 +43,84 @@ export function HomeScreen({ navigation }: Props) {
   };
 
   return (
-    <GestureHandlerRootView style={styles.flex}>
-      <SafeAreaView style={styles.flex} edges={["top"]}>
-        <View style={styles.flex}>
-          <View style={styles.topBar}>
-            <View style={styles.topBarLeft}>
-              <Text style={styles.greeting}>Nearby fuel</Text>
-              <Text style={styles.location} numberOfLines={1}>
-                {location.label}
-              </Text>
-            </View>
-            <Pressable style={styles.liveBadge} onPress={() => void onRefresh()}>
-              <View style={styles.liveDot} />
-              <Text style={styles.liveText}>{refreshing ? "…" : "Live"}</Text>
-            </Pressable>
-          </View>
-
-          <FuelTypeSelector value={fuelType} onChange={setFuelType} />
-
-          <View style={styles.mapWrap}>
-            {loading && stations.length === 0 ? (
-              <View style={styles.center}>
-                <ActivityIndicator size="large" color={colors.primary} />
-                <Text style={styles.loadingText}>Loading stations…</Text>
-              </View>
-            ) : (
-              <StationMap
-                stations={stations}
-                userLatitude={location.latitude}
-                userLongitude={location.longitude}
-                selectedId={selectedId}
-                onSelectStation={(station) => {
-                  setSelectedId(station.id);
-                  navigation.navigate("StationDetail", { stationId: station.id });
-                }}
-              />
-            )}
-          </View>
-
-          {error ? (
-            <Pressable style={styles.errorBanner} onPress={() => void onRefresh()}>
-              <Text style={styles.errorText}>{error}</Text>
-              <Text style={styles.errorAction}>Tap to retry</Text>
-            </Pressable>
-          ) : null}
-
-          <BottomSheet
-            title="Best prices near you"
-            subtitle={
-              loading
-                ? "Fetching live E-Control prices…"
-                : `${stations.length} stations · sorted by distance`
-            }
-            data={stations}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-              <StationItem
-                station={item}
-                averagePrice={averagePrice}
-                onPress={() => {
-                  setSelectedId(item.id);
-                  navigation.navigate("StationDetail", { stationId: item.id });
-                }}
-              />
-            )}
-          />
+    <View style={styles.container}>
+      {loading && stations.length === 0 ? (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Loading stations…</Text>
         </View>
+      ) : (
+        <StationMap
+          stations={stations}
+          userLatitude={location.latitude}
+          userLongitude={location.longitude}
+          selectedId={selectedId}
+          onSelectStation={(station) => {
+            setSelectedId(station.id);
+            navigation.navigate("StationDetail", { stationId: station.id });
+          }}
+        />
+      )}
+
+      <SafeAreaView style={styles.headerOverlay} edges={["top"]} pointerEvents="box-none">
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
+            <Text style={styles.greeting}>Nearby fuel</Text>
+            <Text style={styles.location} numberOfLines={1}>
+              {location.label}
+            </Text>
+          </View>
+          <Pressable style={styles.liveBadge} onPress={() => void onRefresh()}>
+            <View style={styles.liveDot} />
+            <Text style={styles.liveText}>{refreshing ? "…" : "Live"}</Text>
+          </Pressable>
+        </View>
+        <FuelTypeSelector value={fuelType} onChange={setFuelType} />
       </SafeAreaView>
-    </GestureHandlerRootView>
+
+      {error ? (
+        <Pressable style={styles.errorBanner} onPress={() => void onRefresh()}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Text style={styles.errorAction}>Tap to retry</Text>
+        </Pressable>
+      ) : null}
+
+      <BottomSheet
+        title="Best prices near you"
+        subtitle={
+          loading
+            ? "Fetching live E-Control prices…"
+            : `${stations.length} stations · sorted by distance`
+        }
+        data={stations}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <StationItem
+            station={item}
+            averagePrice={averagePrice}
+            onPress={() => {
+              setSelectedId(item.id);
+              navigation.navigate("StationDetail", { stationId: item.id });
+            }}
+          />
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  headerOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+  },
   topBar: {
     paddingHorizontal: 20,
     paddingTop: 8,
@@ -157,12 +161,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.primary,
   },
-  mapWrap: {
-    flex: 1,
-    minHeight: 220,
-  },
-  center: {
-    flex: 1,
+  loadingOverlay: {
+    ...StyleSheet.absoluteFill,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E8F0EA",
@@ -172,9 +172,14 @@ const styles = StyleSheet.create({
     ...typography.caption,
   },
   errorBanner: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 120,
+    zIndex: 3,
     backgroundColor: "#FEF2F2",
-    borderTopWidth: 1,
-    borderTopColor: "#FECACA",
+    borderBottomWidth: 1,
+    borderBottomColor: "#FECACA",
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
