@@ -2,8 +2,9 @@ import BottomSheetLib, {
   BottomSheetFlatList,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import { ReactNode, useMemo, useRef } from "react";
+import { ReactNode, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { colors } from "../theme/colors";
 import { typography } from "../theme/typography";
@@ -25,15 +26,15 @@ export function BottomSheet<T>({
   keyExtractor,
   header,
 }: BottomSheetProps<T>) {
-  const sheetRef = useRef<BottomSheetLib>(null);
-  const snapPoints = useMemo(() => ["28%", "55%", "88%"], []);
+  const insets = useSafeAreaInsets();
+  const snapPoints = useMemo(() => ["22%", "48%", "86%"], []);
 
   return (
     <BottomSheetLib
-      ref={sheetRef}
       index={1}
       snapPoints={snapPoints}
       enablePanDownToClose={false}
+      bottomInset={0}
       backgroundStyle={styles.sheetBackground}
       handleIndicatorStyle={styles.handle}
     >
@@ -46,9 +47,9 @@ export function BottomSheet<T>({
         data={data}
         keyExtractor={keyExtractor}
         renderItem={({ item, index }) => (
-          <View style={styles.itemWrap}>{renderItem({ item, index })}</View>
+          <View>{renderItem({ item, index })}</View>
         )}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 24 }]}
         showsVerticalScrollIndicator={false}
       />
     </BottomSheetLib>
@@ -84,9 +85,5 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 16,
-    paddingBottom: 40,
-  },
-  itemWrap: {
-    backgroundColor: colors.surface,
   },
 });
