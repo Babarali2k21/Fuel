@@ -5,19 +5,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "../theme/colors";
 
 const labels: Record<string, string> = {
-  Home: "Home",
+  HomeTab: "Home",
   Insights: "Insights",
   Favorites: "Saved",
   Alerts: "Alerts",
-  Profile: "Profile",
+  ProfileTab: "Profile",
 };
 
 const icons: Record<string, string> = {
-  Home: "⌂",
+  HomeTab: "⌂",
   Insights: "◔",
   Favorites: "★",
   Alerts: "◉",
-  Profile: "☺",
+  ProfileTab: "☺",
 };
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
