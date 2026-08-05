@@ -1,6 +1,6 @@
 # SpritCheck Austria
 
-Mobile-first fuel recommendation app for Austria with freemium monetization.
+Mobile-first fuel recommendation app for Austria.
 
 ## Stack
 
