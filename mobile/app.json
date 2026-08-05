@@ -6,13 +6,13 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "backgroundColor": "#F9FAFB"
-    },
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "SpritCheck uses your location to find nearby fuel stations and prices."
+        "NSLocationWhenInUseUsageDescription": "SpritCheck uses your location to find nearby fuel stations and prices.",
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        }
       }
     },
     "android": {
@@ -36,6 +36,12 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Allow SpritCheck to use your location to find nearby fuel stations."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F9FAFB"
         }
       ]
     ]
