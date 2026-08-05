@@ -8,7 +8,7 @@ import { useAppStore } from "../store/useAppStore";
 import { colors } from "../theme/colors";
 import { typography } from "../theme/typography";
 
-type Props = NativeStackScreenProps<ProfileStackParamList, "Profile">;
+type Props = NativeStackScreenProps<ProfileStackParamList, "ProfileMain">;
 
 const settings = [
   "Vehicle profiles",
