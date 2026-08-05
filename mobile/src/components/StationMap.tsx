@@ -1,11 +1,9 @@
-import { useMemo, useRef } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import { useEffect, useMemo, useRef } from "react";
+import { Platform, StyleSheet } from "react-native";
+import MapView, { Marker, Region } from "react-native-maps";
 
 import { Station } from "../lib/api";
-import { getPriceTier, getAveragePrice } from "../types/station";
-import { colors } from "../theme/colors";
-import { PriceTier } from "../types/station";
+import { getPriceTier, getAveragePrice, PriceTier } from "../types/station";
 
 interface StationMapProps {
   stations: Station[];
@@ -15,10 +13,10 @@ interface StationMapProps {
   onSelectStation?: (station: Station) => void;
 }
 
-const tierColors: Record<PriceTier, string> = {
-  cheap: colors.priceCheap,
-  average: colors.priceAverage,
-  expensive: colors.priceExpensive,
+const pinColors: Record<PriceTier, string> = {
+  cheap: "#22C55E",
+  average: "#F59E0B",
+  expensive: "#EF4444",
 };
 
 export function StationMap({
@@ -31,92 +29,52 @@ export function StationMap({
   const mapRef = useRef<MapView>(null);
   const average = useMemo(() => getAveragePrice(stations), [stations]);
 
-  const initialRegion = {
+  const region: Region = {
     latitude: userLatitude,
     longitude: userLongitude,
     latitudeDelta: 0.06,
     longitudeDelta: 0.06,
   };
 
-  return (
-    <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        provider={PROVIDER_DEFAULT}
-        initialRegion={initialRegion}
-        showsUserLocation
-        showsMyLocationButton={Platform.OS === "android"}
-        userInterfaceStyle="light"
-      >
-        {stations.map((station) => {
-          const price = station.price_per_liter;
-          const tier = getPriceTier(price, average);
-          const selected = station.id === selectedId;
+  useEffect(() => {
+    mapRef.current?.animateToRegion(region, 500);
+  }, [userLatitude, userLongitude]);
 
-          return (
-            <Marker
-              key={station.id}
-              coordinate={{
-                latitude: station.location.latitude,
-                longitude: station.location.longitude,
-              }}
-              onPress={() => onSelectStation?.(station)}
-            >
-              <View style={[styles.marker, selected && styles.markerSelected]}>
-                <View style={[styles.markerDot, { backgroundColor: tierColors[tier] }]} />
-                {price != null && (
-                  <Text style={[styles.markerLabel, selected && styles.markerLabelSelected]}>
-                    €{price.toFixed(2)}
-                  </Text>
-                )}
-              </View>
-            </Marker>
-          );
-        })}
-      </MapView>
-    </View>
+  return (
+    <MapView
+      ref={mapRef}
+      style={styles.map}
+      initialRegion={region}
+      showsUserLocation
+      showsMyLocationButton={Platform.OS === "android"}
+      userInterfaceStyle="light"
+    >
+      {stations.map((station) => {
+        const price = station.price_per_liter;
+        const tier = getPriceTier(price, average);
+        const selected = station.id === selectedId;
+
+        return (
+          <Marker
+            key={station.id}
+            coordinate={{
+              latitude: station.location.latitude,
+              longitude: station.location.longitude,
+            }}
+            pinColor={selected ? "#2563EB" : pinColors[tier]}
+            title={station.name}
+            description={price != null ? `€${price.toFixed(3)}/L` : undefined}
+            onPress={() => onSelectStation?.(station)}
+            tracksViewChanges={false}
+          />
+        );
+      })}
+    </MapView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   map: {
-    flex: 1,
-  },
-  marker: {
-    alignItems: "center",
-  },
-  markerSelected: {
-    transform: [{ scale: 1.08 }],
-  },
-  markerDot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 2,
-    borderColor: colors.surface,
-  },
-  markerLabel: {
-    marginTop: 4,
-    fontSize: 11,
-    fontWeight: "700",
-    color: colors.text,
-    backgroundColor: colors.surface,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  markerLabelSelected: {
-    borderWidth: 1,
-    borderColor: colors.primary,
+    ...StyleSheet.absoluteFill,
   },
 });
