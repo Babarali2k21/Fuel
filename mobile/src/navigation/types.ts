@@ -1,19 +1,19 @@
 export type HomeStackParamList = {
-  Home: undefined;
+  HomeMap: undefined;
   StationDetail: { stationId: number };
 };
 
 export type ProfileStackParamList = {
-  Profile: undefined;
+  ProfileMain: undefined;
   Premium: undefined;
 };
 
 export type TabParamList = {
-  Home: undefined;
+  HomeTab: undefined;
   Insights: undefined;
   Favorites: undefined;
   Alerts: undefined;
-  Profile: undefined;
+  ProfileTab: undefined;
 };
 
 declare global {

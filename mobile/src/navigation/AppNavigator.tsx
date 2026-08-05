@@ -28,7 +28,11 @@ function HomeStackNavigator() {
         contentStyle: { backgroundColor: colors.background },
       }}
     >
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <HomeStack.Screen
+        name="HomeMap"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
       <HomeStack.Screen
         name="StationDetail"
         component={StationDetailScreen}
@@ -48,7 +52,11 @@ function ProfileStackNavigator() {
         contentStyle: { backgroundColor: colors.background },
       }}
     >
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <ProfileStack.Screen
+        name="ProfileMain"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
       <ProfileStack.Screen
         name="Premium"
         component={PremiumScreen}
@@ -70,7 +78,7 @@ function MainTabs() {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeStackNavigator}
         options={{ headerShown: false, title: "Home" }}
       />
@@ -78,7 +86,7 @@ function MainTabs() {
       <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: "Favorites" }} />
       <Tab.Screen name="Alerts" component={AlertsScreen} options={{ title: "Alerts" }} />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={ProfileStackNavigator}
         options={{ headerShown: false, title: "Profile" }}
       />
