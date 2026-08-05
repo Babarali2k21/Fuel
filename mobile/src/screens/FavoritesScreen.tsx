@@ -32,7 +32,7 @@ export function FavoritesScreen() {
           <Text style={styles.emptyText}>
             Save a station from its detail page to see it here.
           </Text>
-          <Button label="Find stations" onPress={() => navigation.navigate("Home")} />
+          <Button label="Find stations" onPress={() => navigation.navigate("HomeTab")} />
         </View>
       ) : (
         <FlatList
